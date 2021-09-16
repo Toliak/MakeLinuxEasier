@@ -7,8 +7,7 @@ INSTALLER_DEBIAN="sudo apt install -y"
 
 function commandMustExists() {
   COMMAND="$1"
-  if ! command -v "$1" &> /dev/null
-  then
+  if ! command -v "$1" &>/dev/null; then
     printf "Command \"\e[34m%s\e[0m\" \e[31mnot found\e[0m\n" "$COMMAND"
     exit 1
   fi
@@ -90,32 +89,41 @@ function checkFeatures() {
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "5" || "$FEATURE_TO_CHECK" == "6" ]]; then
-      if [[ "$OS" == "1" ]]; then
-        commandMustExists "pacman"
-        return
-      fi
-      if [[ "$OS" == "2" ]]; then
-        commandMustExists "apt"
-        return
-      fi
+    if [[ "$OS" == "1" ]]; then
+      commandMustExists "pacman"
+      return
+    fi
+    if [[ "$OS" == "2" ]]; then
+      commandMustExists "apt"
+      return
+    fi
   fi
 }
 
 function installFeature() {
   FEATURE_TO_CHECK="$1"
   if [[ "$FEATURE_TO_CHECK" == "1" ]]; then
-    git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh  --depth 1 || 1
+    git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh --depth 1 || 1
     cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc || 1
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k || 1
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh-syntax-highlighting" --depth 1 || 1
     sed 's/ZSH_THEME="[^"]\+"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
-    echo "source $HOME/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> "~/.zshrc"
+    echo "bindkey  "^[[H"   beginning-of-line" >>~/.zshrc
+    echo "bindkey  "^[[F"   end-of-line" >>~/.zshrc
+    echo "bindkey  "^[[3~"  delete-char" >>~/.zshrc
+    echo "source $HOME/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >>~/.zshrc
 
-    printf 'Installed syntax highlighting and powerlevel10k. Enter\e[34m\n\nzsh\np10k configure\n\n\e[0mTo configure powerlevel10k\e[0m'
+    printf '\e[32mInstalled\e[0m \e[34msyntax highlighting\e[0m and \e[34mpowerlevel10k\e[0m.
+Enter\e[34m\n\nzsh\np10k configure\n\n\e[0mTo configure \e[34mpowerlevel10k\e[0m\n'
 
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "2" ]]; then
+
+    git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+    sh ~/.vim_runtime/install_awesome_vimrc.sh
+
+    printf '\e[32mInstalled\e[0m \e[34Ultimate VIM\e[0m\n'
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "3" ]]; then
@@ -125,23 +133,23 @@ function installFeature() {
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
-      if [[ "$OS" == "1" ]]; then
-        $INSTALLER_ARCH zsh powerline tmux vim
-      fi
-      if [[ "$OS" == "2" ]]; then
-        $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
-        return
-      fi
+    if [[ "$OS" == "1" ]]; then
+      $INSTALLER_ARCH zsh powerline tmux vim
+    fi
+    if [[ "$OS" == "2" ]]; then
+      $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
+      return
+    fi
   fi
   if [[ "$FEATURE_TO_CHECK" == "6" ]]; then
-      if [[ "$OS" == "1" ]]; then
-        $INSTALLER_ARCH git
-        return
-      fi
-      if [[ "$OS" == "2" ]]; then
-        $INSTALLER_DEBIAN git
-        return
-      fi
+    if [[ "$OS" == "1" ]]; then
+      $INSTALLER_ARCH git
+      return
+    fi
+    if [[ "$OS" == "2" ]]; then
+      $INSTALLER_DEBIAN git
+      return
+    fi
   fi
 }
 
@@ -202,6 +210,9 @@ function readMultipleData() {
   printf "\b> Entered\e[0m: \e[34m$ANSWER\e[0m\n\n"
 }
 
+read -n1 char
+ord "$char"
+
 dataAboutOS
 readData "123"
 OS="$RETURN_VALUE"
@@ -210,3 +221,4 @@ features
 readMultipleData "$FEATURES_AVAILABLE"
 FEATURES="$RETURN_VALUE"
 
+printf 'All features has been installed'
