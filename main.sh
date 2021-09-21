@@ -2,8 +2,18 @@
 
 set -e
 
-INSTALLER_ARCH="sudo pacman --noconfirm -S"
-INSTALLER_DEBIAN="sudo apt install -y"
+
+UPDATER_ARCH="pacman --noconfirm -Syy"
+INSTALLER_ARCH="pacman --noconfirm -S"
+UPDATER_DEBIAN="apt update -y"
+INSTALLER_DEBIAN="apt install -y"
+
+if [[ "$UID" != "0" ]]; then
+  UPDATER_ARCH="sudo $UPDATER_ARCH"
+  INSTALLER_ARCH="sudo $INSTALLER_ARCH"
+  UPDATER_DEBIAN="sudo $UPDATER_DEBIAN"
+  INSTALLER_DEBIAN="sudo $INSTALLER_DEBIAN"
+fi
 
 function commandMustExists() {
   COMMAND="$1"
@@ -21,7 +31,6 @@ function dataAboutOS() {
 \e[34m3.  \e[0mOther linux
 
 Windows is \e[31mnot supported\e[0m
-
 
 "
 }
@@ -70,7 +79,7 @@ $ALIASES
   printf "\n"
 }
 
-function checkFeatures() {
+function checkFeature() {
   FEATURE_TO_CHECK="$1"
   if [[ "$FEATURE_TO_CHECK" == "1" ]]; then
     commandMustExists "git"
@@ -90,11 +99,11 @@ function checkFeatures() {
   fi
   if [[ "$FEATURE_TO_CHECK" == "5" || "$FEATURE_TO_CHECK" == "6" ]]; then
     if [[ "$OS" == "1" ]]; then
-      commandMustExists "pacman"
+      commandMustExists "apt"
       return
     fi
     if [[ "$OS" == "2" ]]; then
-      commandMustExists "apt"
+      commandMustExists "pacman"
       return
     fi
   fi
@@ -102,8 +111,10 @@ function checkFeatures() {
 
 function installFeature() {
   FEATURE_TO_CHECK="$1"
+
+# Oh My ZSH install
   if [[ "$FEATURE_TO_CHECK" == "1" ]]; then
-    if [ -f "$HOME/.oh-my-zsh/" ]; then
+    if [ -e "$HOME/.oh-my-zsh/" ]; then
       printf '\e[34mOh my ZSH\e[0m is \e[32malready installed\e[0m\n'
     else
       git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh --depth 1
@@ -111,7 +122,7 @@ function installFeature() {
       printf '\e[34mOh my ZSH\e[0m is \e[32minstalled\e[0m\n'
     fi
 
-    if [ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+    if [ -e "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
       printf '\e[34mPowerLevel 10k\e[0m is \e[32malready installed\e[0m\n'
     else
       git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k || 1
@@ -119,7 +130,7 @@ function installFeature() {
       printf '\e[34mPowerLevel 10k\e[0m is \e[32minstalled\e[0m\n'
     fi
 
-    if [ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+    if [ -e "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
       printf '\e[34mZSH Syntax Highlighting\e[0m is \e[32malready installed\e[0m\n'
     else
       git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh-syntax-highlighting" --depth 1 || 1
@@ -129,8 +140,10 @@ function installFeature() {
 
     return
   fi
+
+# Ultimate VIM install
   if [[ "$FEATURE_TO_CHECK" == "2" ]]; then
-    if [ -f "$HOME/.vim_runtime/" ]; then
+    if [ -e "$HOME/.vim_runtime" ]; then
       printf '\e[34mUltimate VIM\e[0m is \e[32malready installed\e[0m\n'
       return
     fi
@@ -141,6 +154,8 @@ function installFeature() {
     printf '\e[34mUltimate VIM\e[0m is \e[32minstalled\e[0m\n'
     return
   fi
+
+# BASHRC Configs
   if [[ "$FEATURE_TO_CHECK" == "3" ]]; then
     if grep -Fxq "# BASHRC configs 1" ~/.bashrc; then
       printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
@@ -152,15 +167,17 @@ function installFeature() {
 
     return
   fi
+
+# Binds and aliases
   if [[ "$FEATURE_TO_CHECK" == "4" ]]; then
-    if [ -f "$HOME/.zshrc" ]; then
+    if [ -e "$HOME/.zshrc" ]; then
       if grep -Fxq "# ZSH binds and aliases 1" ~/.zshrc; then
         printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
       else
         printf "\n\n# ZSH binds and aliases 1\n" >>~/.zshrc
-        echo "bindkey  "^[[H"   beginning-of-line" >>~/.zshrc
-        echo "bindkey  "^[[F"   end-of-line" >>~/.zshrc
-        echo "bindkey  "^[[3~"  delete-char" >>~/.zshrc
+        echo "bindkey  \"^[[H\"   beginning-of-line" >>~/.zshrc
+        echo "bindkey  \"^[[F\"   end-of-line" >>~/.zshrc
+        echo "bindkey  \"^[[3~\"  delete-char" >>~/.zshrc
         echo "alias c=\"clear\"" >>~/.zshrc
         echo "alias ll=\"ls -lah\"" >>~/.zshrc
         echo "alias cdp=\"cd -P\"" >>~/.zshrc
@@ -183,6 +200,8 @@ function installFeature() {
       printf '\e[34mBASHRC binds and aliases\e[0m is \e[32malready installed\e[0m\n'
     else
       printf "\n\n# BASHRC binds and aliases 1\n" >>~/.bashrc
+      echo "bind '\"\\eOC\":forward-word'" >>~/.bashrc
+      echo "bind '\"\\eOD\":backward-word'" >>~/.bashrc
       echo "alias c=\"clear\"" >>~/.bashrc
       echo "alias ll=\"ls -lah\"" >>~/.bashrc
       echo "alias cdp=\"cd -P\"" >>~/.bashrc
@@ -200,26 +219,57 @@ function installFeature() {
 
     return
   fi
+
+# ZSH, powerline, tmux
   if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
     if [[ "$OS" == "1" ]]; then
-      $INSTALLER_ARCH zsh powerline tmux vim
+      $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
     fi
     if [[ "$OS" == "2" ]]; then
-      $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
+      $INSTALLER_ARCH zsh powerline tmux vim
       return
     fi
     printf '\e[34mzsh, powerline, tmux, vim\e[0m is \e[32minstalled\e[0m\n'
   fi
+
+# git
   if [[ "$FEATURE_TO_CHECK" == "6" ]]; then
     if [[ "$OS" == "1" ]]; then
-      $INSTALLER_ARCH git
-      return
-    fi
-    if [[ "$OS" == "2" ]]; then
       $INSTALLER_DEBIAN git
       return
     fi
+    if [[ "$OS" == "2" ]]; then
+      $INSTALLER_ARCH git
+      return
+    fi
     printf '\e[34mgit\e[0m is \e[32minstalled\e[0m\n'
+  fi
+}
+
+function installAllFeatures() {
+  if [[ "$FEATURES" == *"5"* ]]; then
+    checkFeature 5
+    installFeature 5
+  fi
+  if [[ "$FEATURES" == *"6"* ]]; then
+    checkFeature 6
+    installFeature 6
+  fi
+  if [[ "$FEATURES" == *"3"* ]]; then
+    checkFeature 3
+    installFeature 3
+  fi
+  if [[ "$FEATURES" == *"1"* ]]; then
+    checkFeature 1
+    installFeature 1
+  fi
+  if [[ "$FEATURES" == *"4"* ]]; then
+    checkFeature 4
+    installFeature 4
+  fi
+  if [[ "$FEATURES" == *"2"* ]]; then
+    checkFeature 2
+    installFeature 2
   fi
 }
 
@@ -280,8 +330,8 @@ function readMultipleData() {
   printf "\b> Entered\e[0m: \e[34m$ANSWER\e[0m\n\n"
 }
 
-read -n1 char
-ord "$char"
+#read -n1 char
+#ord "$char"
 
 dataAboutOS
 readData "123"
@@ -291,6 +341,6 @@ features
 readMultipleData "$FEATURES_AVAILABLE"
 FEATURES="$RETURN_VALUE"
 
-
+installAllFeatures
 
 printf 'All features has been \e[32minstalled\e[0m\n'
