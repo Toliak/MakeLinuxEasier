@@ -103,33 +103,101 @@ function checkFeatures() {
 function installFeature() {
   FEATURE_TO_CHECK="$1"
   if [[ "$FEATURE_TO_CHECK" == "1" ]]; then
-    git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh --depth 1 || 1
-    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc || 1
-    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k || 1
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh-syntax-highlighting" --depth 1 || 1
-    sed 's/ZSH_THEME="[^"]\+"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
-    echo "bindkey  "^[[H"   beginning-of-line" >>~/.zshrc
-    echo "bindkey  "^[[F"   end-of-line" >>~/.zshrc
-    echo "bindkey  "^[[3~"  delete-char" >>~/.zshrc
-    echo "source $HOME/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >>~/.zshrc
+    if [ -f "$HOME/.oh-my-zsh/" ]; then
+      printf '\e[34mOh my ZSH\e[0m is \e[32malready installed\e[0m\n'
+    else
+      git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh --depth 1
+      cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+      printf '\e[34mOh my ZSH\e[0m is \e[32minstalled\e[0m\n'
+    fi
 
-    printf '\e[32mInstalled\e[0m \e[34msyntax highlighting\e[0m and \e[34mpowerlevel10k\e[0m.
-Enter\e[34m\n\nzsh\np10k configure\n\n\e[0mTo configure \e[34mpowerlevel10k\e[0m\n'
+    if [ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+      printf '\e[34mPowerLevel 10k\e[0m is \e[32malready installed\e[0m\n'
+    else
+      git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k || 1
+      sed 's/ZSH_THEME="[^"]\+"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
+      printf '\e[34mPowerLevel 10k\e[0m is \e[32minstalled\e[0m\n'
+    fi
+
+    if [ -f "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+      printf '\e[34mZSH Syntax Highlighting\e[0m is \e[32malready installed\e[0m\n'
+    else
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh-syntax-highlighting" --depth 1 || 1
+      echo "source $HOME/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >>~/.zshrc
+      printf '\e[34mZSH Syntax Highlighting\e[0m is \e[32minstalled\e[0m\n'
+    fi
 
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "2" ]]; then
+    if [ -f "$HOME/.vim_runtime/" ]; then
+      printf '\e[34mUltimate VIM\e[0m is \e[32malready installed\e[0m\n'
+      return
+    fi
 
     git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
     sh ~/.vim_runtime/install_awesome_vimrc.sh
 
-    printf '\e[32mInstalled\e[0m \e[34Ultimate VIM\e[0m\n'
+    printf '\e[34mUltimate VIM\e[0m is \e[32minstalled\e[0m\n'
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "3" ]]; then
+    if grep -Fxq "# BASHRC configs 1" ~/.bashrc; then
+      printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
+    else
+      printf "\n\n# BASHRC configs 1\n" >>~/.bashrc
+      echo "PS1='\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h:\[\033[1;35m\]\w\[\033[1;31m\]\$\[\033[0m\] '" >>~/.bashrc
+      printf '\e[34mBASHRC configs\e[0m is \e[32minstalled\e[0m\n'
+    fi
+
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "4" ]]; then
+    if [ -f "$HOME/.zshrc" ]; then
+      if grep -Fxq "# ZSH binds and aliases 1" ~/.zshrc; then
+        printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
+      else
+        printf "\n\n# ZSH binds and aliases 1\n" >>~/.zshrc
+        echo "bindkey  "^[[H"   beginning-of-line" >>~/.zshrc
+        echo "bindkey  "^[[F"   end-of-line" >>~/.zshrc
+        echo "bindkey  "^[[3~"  delete-char" >>~/.zshrc
+        echo "alias c=\"clear\"" >>~/.zshrc
+        echo "alias ll=\"ls -lah\"" >>~/.zshrc
+        echo "alias cdp=\"cd -P\"" >>~/.zshrc
+        echo "alias ssr=\"ssh -l root\"" >>~/.zshrc
+
+        if [[ "$OS" == "1" ]]; then
+          echo "" >>~/.zshrc
+        fi
+        if [[ "$OS" == "2" ]]; then
+          echo "alias pac=\"sudo pacman --noconfirm\"" >>~/.zshrc
+          echo "alias pac=\"yaourt --noconfirm\"" >>~/.zshrc
+        fi
+        printf '\e[34mZSH bind and aliases\e[0m is \e[32minstalled\e[0m\n'
+      fi
+    else
+      printf '\e[34mZSH bind and aliases\e[0m \e[31mnot found\e[0m\n'
+    fi
+
+    if grep -Fxq "# BASHRC binds and aliases 1" ~/.bashrc; then
+      printf '\e[34mBASHRC binds and aliases\e[0m is \e[32malready installed\e[0m\n'
+    else
+      printf "\n\n# BASHRC binds and aliases 1\n" >>~/.bashrc
+      echo "alias c=\"clear\"" >>~/.bashrc
+      echo "alias ll=\"ls -lah\"" >>~/.bashrc
+      echo "alias cdp=\"cd -P\"" >>~/.bashrc
+      echo "alias ssr=\"ssh -l root\"" >>~/.bashrc
+
+      if [[ "$OS" == "1" ]]; then
+        echo "" >>~/.bashrc
+      fi
+      if [[ "$OS" == "2" ]]; then
+        echo "alias pac=\"sudo pacman --noconfirm\"" >>~/.bashrc
+        echo "alias pac=\"yaourt --noconfirm\"" >>~/.bashrc
+      fi
+      printf '\e[34mBASHRC bind and aliases\e[0m is \e[32minstalled\e[0m\n'
+    fi
+
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
@@ -140,6 +208,7 @@ Enter\e[34m\n\nzsh\np10k configure\n\n\e[0mTo configure \e[34mpowerlevel10k\e[0m
       $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
       return
     fi
+    printf '\e[34mzsh, powerline, tmux, vim\e[0m is \e[32minstalled\e[0m\n'
   fi
   if [[ "$FEATURE_TO_CHECK" == "6" ]]; then
     if [[ "$OS" == "1" ]]; then
@@ -150,6 +219,7 @@ Enter\e[34m\n\nzsh\np10k configure\n\n\e[0mTo configure \e[34mpowerlevel10k\e[0m
       $INSTALLER_DEBIAN git
       return
     fi
+    printf '\e[34mgit\e[0m is \e[32minstalled\e[0m\n'
   fi
 }
 
@@ -221,4 +291,6 @@ features
 readMultipleData "$FEATURES_AVAILABLE"
 FEATURES="$RETURN_VALUE"
 
-printf 'All features has been installed'
+
+
+printf 'All features has been \e[32minstalled\e[0m\n'
