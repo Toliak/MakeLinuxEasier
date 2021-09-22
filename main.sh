@@ -126,7 +126,7 @@ function installFeature() {
       printf '\e[34mPowerLevel 10k\e[0m is \e[32malready installed\e[0m\n'
     else
       git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k || 1
-      sed 's/ZSH_THEME="[^"]\+"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
+      sed -i 's/ZSH_THEME="[^"]\+"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
       printf '\e[34mPowerLevel 10k\e[0m is \e[32minstalled\e[0m\n'
     fi
 
@@ -223,9 +223,11 @@ function installFeature() {
 # ZSH, powerline, tmux
   if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
     if [[ "$OS" == "1" ]]; then
+      $UPDATER_DEBIAN
       $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
     fi
     if [[ "$OS" == "2" ]]; then
+      $UPDATER_ARCH
       $INSTALLER_ARCH zsh powerline tmux vim
       return
     fi
@@ -235,10 +237,12 @@ function installFeature() {
 # git
   if [[ "$FEATURE_TO_CHECK" == "6" ]]; then
     if [[ "$OS" == "1" ]]; then
+      $UPDATER_DEBIAN
       $INSTALLER_DEBIAN git
       return
     fi
     if [[ "$OS" == "2" ]]; then
+      $UPDATER_ARCH
       $INSTALLER_ARCH git
       return
     fi
