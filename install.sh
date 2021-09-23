@@ -2,6 +2,7 @@
 
 set -e
 
+MAKE_LINUX_EASIER_PATH="$1"
 
 UPDATER_ARCH="pacman --noconfirm -Syy"
 INSTALLER_ARCH="pacman --noconfirm -S"
@@ -14,6 +15,10 @@ if [[ "$UID" != "0" ]]; then
   UPDATER_DEBIAN="sudo $UPDATER_DEBIAN"
   INSTALLER_DEBIAN="sudo $INSTALLER_DEBIAN"
 fi
+
+OH_MY_ZSH_PATH="$HOME/.local/share/oh-my-zsh"
+POWERLEVEL_10K_PATH="$OH_MY_ZSH_PATH/custom/themes/powerlevel10k"
+ZSH_SYNTAX_HIGHLIGHT_PATH="$HOME/.local/share/zsh-syntax-highlighting"
 
 function commandMustExists() {
   COMMAND="$1"
@@ -39,8 +44,8 @@ Windows is \e[31mnot supported\e[0m
 function features() {
   ZSH="\e[34m1.  \e[0mInstall Oh My ZSH \e[35m(+powerlevel 10k, +key aliases)\e[0m"
   VIM="\e[34m2.  \e[0mInstall Ultimate Vim\e[0m"
-  BASH="\e[34m3.  \e[0mApply bash configs\e[0m"
-  ALIASES="\e[34m4.  \e[0mApply command aliases (bash and zsh, if installed)\e[0m"
+  BASH_CONFIGS="\e[34m3.  \e[0mApply bash configs\e[0m"
+  ZSH_CONFIGS="\e[34m4.  \e[0mApply zsh configs\e[0m"
   PACKAGES_TERM="\e[34m5.  \e[0mInstall zsh, powerline, tmux, vim"
   PACKAGES_UTIL="\e[34m6.  \e[0mInstall git"
 
@@ -50,8 +55,8 @@ function features() {
     printf "
 $ZSH
 $VIM
-$BASH
-$ALIASES
+$BASH_CONFIGS
+$ZSH_CONFIGS
 $PACKAGES_TERM
 $PACKAGES_UTIL
 "
@@ -60,8 +65,8 @@ $PACKAGES_UTIL
     printf "
 $ZSH
 $VIM
-$BASH
-$ALIASES
+$BASH_CONFIGS
+$ZSH_CONFIGS
 $PACKAGES_TERM
 $PACKAGES_UTIL
 "
@@ -70,8 +75,8 @@ $PACKAGES_UTIL
     printf "
 $ZSH
 $VIM
-$BASH
-$ALIASES
+$BASH_CONFIGS
+$ZSH_CONFIGS
 "
     FEATURES_AVAILABLE="1234"
   fi
@@ -114,27 +119,27 @@ function installFeature() {
 
 # Oh My ZSH install
   if [[ "$FEATURE_TO_CHECK" == "1" ]]; then
-    if [ -e "$HOME/.oh-my-zsh/" ]; then
+    if [ -e "$OH_MY_ZSH_PATH" ]; then
       printf '\e[34mOh my ZSH\e[0m is \e[32malready installed\e[0m\n'
     else
-      git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh --depth 1
-      cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+      git clone https://github.com/robbyrussell/oh-my-zsh.git "$OH_MY_ZSH_PATH" --depth 1
+      cp "$POWERLEVEL_10K_PATH/templates/zshrc.zsh-template" ~/.zshrc
       printf '\e[34mOh my ZSH\e[0m is \e[32minstalled\e[0m\n'
     fi
 
-    if [ -e "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+    if [ -e "$POWERLEVEL_10K_PATH" ]; then
       printf '\e[34mPowerLevel 10k\e[0m is \e[32malready installed\e[0m\n'
     else
-      git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k || 1
+      git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$POWERLEVEL_10K_PATH" || 1
       sed -i 's/ZSH_THEME="[^"]\+"/ZSH_THEME="powerlevel10k\/powerlevel10k"/g' ~/.zshrc
       printf '\e[34mPowerLevel 10k\e[0m is \e[32minstalled\e[0m\n'
     fi
 
-    if [ -e "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]; then
+    if [ -e "$ZSH_SYNTAX_HIGHLIGHT_PATH" ]; then
       printf '\e[34mZSH Syntax Highlighting\e[0m is \e[32malready installed\e[0m\n'
     else
-      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$HOME/.zsh-syntax-highlighting" --depth 1 || 1
-      echo "source $HOME/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >>~/.zshrc
+      git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_SYNTAX_HIGHLIGHT_PATH" --depth 1 || 1
+      echo "source $ZSH_SYNTAX_HIGHLIGHT_PATH/zsh-syntax-highlighting.zsh" >>~/.zshrc
       printf '\e[34mZSH Syntax Highlighting\e[0m is \e[32minstalled\e[0m\n'
     fi
 
@@ -143,25 +148,25 @@ function installFeature() {
 
 # Ultimate VIM install
   if [[ "$FEATURE_TO_CHECK" == "2" ]]; then
-    if [ -e "$HOME/.vim_runtime" ]; then
+    if [ -e "$VIM_RUNTIME" ]; then
       printf '\e[34mUltimate VIM\e[0m is \e[32malready installed\e[0m\n'
       return
     fi
 
-    git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
-    sh ~/.vim_runtime/install_awesome_vimrc.sh
+    git clone --depth=1 https://github.com/amix/vimrc.git "$VIM_RUNTIME"
+    sh "$VIM_RUNTIME/install_awesome_vimrc.sh"
 
     printf '\e[34mUltimate VIM\e[0m is \e[32minstalled\e[0m\n'
     return
   fi
 
 # BASHRC Configs
+# Todo: move them into directory
   if [[ "$FEATURE_TO_CHECK" == "3" ]]; then
-    if grep -Fxq "# BASHRC configs 1" ~/.bashrc; then
+    if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/bash_config" ~/.bashrc; then
       printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
     else
-      printf "\n\n# BASHRC configs 1\n" >>~/.bashrc
-      echo "PS1='\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h:\[\033[1;35m\]\w\[\033[1;31m\]\$\[\033[0m\] '" >>~/.bashrc
+      echo ". $MAKE_LINUX_EASIER_PATH/bash_config" >>~/.bashrc
       printf '\e[34mBASHRC configs\e[0m is \e[32minstalled\e[0m\n'
     fi
 
@@ -171,50 +176,14 @@ function installFeature() {
 # Binds and aliases
   if [[ "$FEATURE_TO_CHECK" == "4" ]]; then
     if [ -e "$HOME/.zshrc" ]; then
-      if grep -Fxq "# ZSH binds and aliases 1" ~/.zshrc; then
+      if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/zsh_config" ~/.zshrc; then
         printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
       else
-        printf "\n\n# ZSH binds and aliases 1\n" >>~/.zshrc
-        echo "bindkey  \"^[[H\"   beginning-of-line" >>~/.zshrc
-        echo "bindkey  \"^[[F\"   end-of-line" >>~/.zshrc
-        echo "bindkey  \"^[[3~\"  delete-char" >>~/.zshrc
-        echo "alias c=\"clear\"" >>~/.zshrc
-        echo "alias ll=\"ls -lah\"" >>~/.zshrc
-        echo "alias cdp=\"cd -P\"" >>~/.zshrc
-        echo "alias ssr=\"ssh -l root\"" >>~/.zshrc
-
-        if [[ "$OS" == "1" ]]; then
-          echo "" >>~/.zshrc
-        fi
-        if [[ "$OS" == "2" ]]; then
-          echo "alias pac=\"sudo pacman --noconfirm\"" >>~/.zshrc
-          echo "alias pac=\"yaourt --noconfirm\"" >>~/.zshrc
-        fi
+        echo ". $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.bashrc
         printf '\e[34mZSH bind and aliases\e[0m is \e[32minstalled\e[0m\n'
       fi
     else
       printf '\e[34mZSH bind and aliases\e[0m \e[31mnot found\e[0m\n'
-    fi
-
-    if grep -Fxq "# BASHRC binds and aliases 1" ~/.bashrc; then
-      printf '\e[34mBASHRC binds and aliases\e[0m is \e[32malready installed\e[0m\n'
-    else
-      printf "\n\n# BASHRC binds and aliases 1\n" >>~/.bashrc
-      echo "bind '\"\\eOC\":forward-word'" >>~/.bashrc
-      echo "bind '\"\\eOD\":backward-word'" >>~/.bashrc
-      echo "alias c=\"clear\"" >>~/.bashrc
-      echo "alias ll=\"ls -lah\"" >>~/.bashrc
-      echo "alias cdp=\"cd -P\"" >>~/.bashrc
-      echo "alias ssr=\"ssh -l root\"" >>~/.bashrc
-
-      if [[ "$OS" == "1" ]]; then
-        echo "" >>~/.bashrc
-      fi
-      if [[ "$OS" == "2" ]]; then
-        echo "alias pac=\"sudo pacman --noconfirm\"" >>~/.bashrc
-        echo "alias pac=\"yaourt --noconfirm\"" >>~/.bashrc
-      fi
-      printf '\e[34mBASHRC bind and aliases\e[0m is \e[32minstalled\e[0m\n'
     fi
 
     return
