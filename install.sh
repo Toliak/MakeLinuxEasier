@@ -188,10 +188,10 @@ function installFeature() {
   if [[ "$FEATURE_TO_CHECK" == "4" ]]; then
     if [ -e "$HOME/.zshrc" ]; then
       if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/zsh_config" ~/.zshrc; then
-      echo ". $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.zshrc
         printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
       else
         echo ". $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.zshrc
+        echo ". $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.zshrc
         if [[ "$OS" == "1" ]]; then
           echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.zshrc
         elif [[ "$OS" == "2" ]]; then
