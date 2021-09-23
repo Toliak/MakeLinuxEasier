@@ -4,6 +4,11 @@ set -e
 
 MAKE_LINUX_EASIER_PATH="$1"
 
+if [[ "$MAKE_LINUX_EASIER_PATH" == "" ]]; then
+  printf '\e[31mExpected argument\e[0m [\e[34mtarget path\e[0m]\n'
+  exit 1
+fi
+
 UPDATER_ARCH="pacman --noconfirm -Syy"
 INSTALLER_ARCH="pacman --noconfirm -S"
 UPDATER_DEBIAN="apt update -y"
@@ -167,6 +172,7 @@ function installFeature() {
       printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
     else
       echo ". $MAKE_LINUX_EASIER_PATH/bash_config" >>~/.bashrc
+      echo ". $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.bashrc
       if [[ "$OS" == "1" ]]; then
         echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.bashrc
       elif [[ "$OS" == "2" ]]; then
@@ -178,17 +184,18 @@ function installFeature() {
     return
   fi
 
-# Binds and aliases
+# ZSH configs
   if [[ "$FEATURE_TO_CHECK" == "4" ]]; then
     if [ -e "$HOME/.zshrc" ]; then
       if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/zsh_config" ~/.zshrc; then
+      echo ". $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.zshrc
         printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
       else
         echo ". $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.zshrc
         if [[ "$OS" == "1" ]]; then
-          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.bashrc
+          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.zshrc
         elif [[ "$OS" == "2" ]]; then
-          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.bashrc
+          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.zshrc
         fi
         printf '\e[34mZSH bind and aliases\e[0m is \e[32minstalled\e[0m\n'
       fi
