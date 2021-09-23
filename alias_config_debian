@@ -1,0 +1,3 @@
+alias sau="sudo apt update -y"
+alias sai="sudo apt install -y"
+alias update="sudo apt update"

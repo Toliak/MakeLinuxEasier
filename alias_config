@@ -1,14 +1,39 @@
 alias c="clear"
-alias ll="ls -lah"
-alias cdp="cd -P"
+alias cl="clear"
+alias ckear="clear"
+alias clr="clear"
+
 alias ssr="ssh -l root"
 
-alias pac="sudo pacman --noconfirm"
-alias yao="yaourt --noconfirm"
-
-alias c="clear"
 alias ll="ls -lah"
+
+alias .="cd .."
+alias ..="cd ../.."
+alias ...="cd ../../.."
+alias ....="cd ../../../.."
+alias .....="cd ../../../../.."
 alias cdp="cd -P"
-alias ssr="ssh -l root"
-alias pac="sudo pacman --noconfirm"
-alias pac="yaourt --noconfirm"
+
+alias du1="du -d 1"
+
+alias dps="sudo docker ps"
+alias di="sudo docker images"
+
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
+alias rm='rm -I --preserve-root'
+
+alias ports='sudo netstat -tulanp'
+
+alias psmem="ps auxf | sort -nr -k 4"
+alias psmem10="ps auxf | sort -nr -k 4 | head -10"
+
+alias pscpu="ps auxf | sort -nr -k 3"
+alias pscpu10="ps auxf | sort -nr -k 3 | head -10"
+
+alias paux='ps aux | grep'
+
+alias usage='du -ch | grep total'
+
+alias totalusage='df -hl --total | grep total'

@@ -167,6 +167,11 @@ function installFeature() {
       printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
     else
       echo ". $MAKE_LINUX_EASIER_PATH/bash_config" >>~/.bashrc
+      if [[ "$OS" == "1" ]]; then
+        echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.bashrc
+      elif [[ "$OS" == "2" ]]; then
+        echo ". $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.bashrc
+      fi
       printf '\e[34mBASHRC configs\e[0m is \e[32minstalled\e[0m\n'
     fi
 
@@ -179,7 +184,12 @@ function installFeature() {
       if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/zsh_config" ~/.zshrc; then
         printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
       else
-        echo ". $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.bashrc
+        echo ". $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.zshrc
+        if [[ "$OS" == "1" ]]; then
+          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.bashrc
+        elif [[ "$OS" == "2" ]]; then
+          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.bashrc
+        fi
         printf '\e[34mZSH bind and aliases\e[0m is \e[32minstalled\e[0m\n'
       fi
     else
