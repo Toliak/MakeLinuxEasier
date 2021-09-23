@@ -128,7 +128,7 @@ function installFeature() {
       printf '\e[34mOh my ZSH\e[0m is \e[32malready installed\e[0m\n'
     else
       git clone https://github.com/robbyrussell/oh-my-zsh.git "$OH_MY_ZSH_PATH" --depth 1
-      cp "$POWERLEVEL_10K_PATH/templates/zshrc.zsh-template" ~/.zshrc
+      cp "$OH_MY_ZSH_PATH/templates/zshrc.zsh-template" ~/.zshrc
       printf '\e[34mOh my ZSH\e[0m is \e[32minstalled\e[0m\n'
     fi
 

@@ -7,11 +7,11 @@ alias ssr="ssh -l root"
 
 alias ll="ls -lah"
 
-alias .="cd .."
-alias ..="cd ../.."
-alias ...="cd ../../.."
-alias ....="cd ../../../.."
-alias .....="cd ../../../../.."
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
+alias .....="cd ../../../.."
+alias ......="cd ../../../../.."
 alias cdp="cd -P"
 
 alias du1="du -d 1"
