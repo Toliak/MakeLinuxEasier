@@ -22,7 +22,7 @@ if [[ "$UID" != "0" ]]; then
 fi
 
 OH_MY_ZSH_PATH="$HOME/.oh-my-zsh"
-VIM_RUNTIME="$HOME/.vim-runtime"
+VIM_RUNTIME="$HOME/.vim_runtime"
 POWERLEVEL_10K_PATH="$OH_MY_ZSH_PATH/custom/themes/powerlevel10k"
 ZSH_SYNTAX_HIGHLIGHT_PATH="$OH_MY_ZSH_PATH/custom/zsh-syntax-highlighting"
 
