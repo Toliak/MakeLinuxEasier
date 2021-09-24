@@ -168,15 +168,15 @@ function installFeature() {
 # BASHRC Configs
 # Todo: move them into directory
   if [[ "$FEATURE_TO_CHECK" == "3" ]]; then
-    if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/bash_config" ~/.bashrc; then
+    if grep -Fxq "source $MAKE_LINUX_EASIER_PATH/bash_config" ~/.bashrc; then
       printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
     else
-      echo ". $MAKE_LINUX_EASIER_PATH/bash_config" >>~/.bashrc
-      echo ". $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.bashrc
+      echo "source $MAKE_LINUX_EASIER_PATH/bash_config" >>~/.bashrc
+      echo "source $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.bashrc
       if [[ "$OS" == "1" ]]; then
-        echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.bashrc
+        echo "source $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.bashrc
       elif [[ "$OS" == "2" ]]; then
-        echo ". $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.bashrc
+        echo "source $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.bashrc
       fi
       printf '\e[34mBASHRC configs\e[0m is \e[32minstalled\e[0m\n'
     fi
@@ -187,15 +187,15 @@ function installFeature() {
 # ZSH configs
   if [[ "$FEATURE_TO_CHECK" == "4" ]]; then
     if [ -e "$HOME/.zshrc" ]; then
-      if grep -Fxq ". $MAKE_LINUX_EASIER_PATH/zsh_config" ~/.zshrc; then
+      if grep -Fxq "source $MAKE_LINUX_EASIER_PATH/zsh_config" ~/.zshrc; then
         printf '\e[34mZSH bind and aliases\e[0m is \e[32malready installed\e[0m\n'
       else
-        echo ". $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.zshrc
-        echo ". $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.zshrc
+        echo "source $MAKE_LINUX_EASIER_PATH/zsh_config" >>~/.zshrc
+        echo "source $MAKE_LINUX_EASIER_PATH/alias_config" >>~/.zshrc
         if [[ "$OS" == "1" ]]; then
-          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.zshrc
+          echo "source $MAKE_LINUX_EASIER_PATH/alias_config_debian" >>~/.zshrc
         elif [[ "$OS" == "2" ]]; then
-          echo ". $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.zshrc
+          echo "source $MAKE_LINUX_EASIER_PATH/alias_config_arch" >>~/.zshrc
         fi
         printf '\e[34mZSH bind and aliases\e[0m is \e[32minstalled\e[0m\n'
       fi

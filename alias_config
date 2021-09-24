@@ -14,7 +14,7 @@ alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 alias cdp="cd -P"
 
-alias du1="du -d 1"
+alias du1="du -dh 1"
 
 alias dps="sudo docker ps"
 alias di="sudo docker images"
