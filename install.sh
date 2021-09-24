@@ -21,10 +21,10 @@ if [[ "$UID" != "0" ]]; then
   INSTALLER_DEBIAN="sudo $INSTALLER_DEBIAN"
 fi
 
-OH_MY_ZSH_PATH="$HOME/.local/share/oh-my-zsh"
-VIM_RUNTIME="$HOME/.local/share/vim-runtime"
+OH_MY_ZSH_PATH="$HOME/.oh-my-zsh"
+VIM_RUNTIME="$HOME/.vim-runtime"
 POWERLEVEL_10K_PATH="$OH_MY_ZSH_PATH/custom/themes/powerlevel10k"
-ZSH_SYNTAX_HIGHLIGHT_PATH="$HOME/.local/share/zsh-syntax-highlighting"
+ZSH_SYNTAX_HIGHLIGHT_PATH="$OH_MY_ZSH_PATH/custom/zsh-syntax-highlighting"
 
 function commandMustExists() {
   COMMAND="$1"
