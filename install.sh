@@ -130,7 +130,6 @@ function installFeature() {
     else
       git clone https://github.com/robbyrussell/oh-my-zsh.git "$OH_MY_ZSH_PATH" --depth 1
       cp "$OH_MY_ZSH_PATH/templates/zshrc.zsh-template" ~/.zshrc
-      sed -i "s/export ZSH=.\+/export ZSH=$OH_MY_ZSH_PATH/g" ~/.zshrc
       printf '\e[34mOh my ZSH\e[0m is \e[32minstalled\e[0m\n'
     fi
 
