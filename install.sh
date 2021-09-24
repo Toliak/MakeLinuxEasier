@@ -22,6 +22,7 @@ if [[ "$UID" != "0" ]]; then
 fi
 
 OH_MY_ZSH_PATH="$HOME/.local/share/oh-my-zsh"
+VIM_RUNTIME="$HOME/.local/share/vim-runtime"
 POWERLEVEL_10K_PATH="$OH_MY_ZSH_PATH/custom/themes/powerlevel10k"
 ZSH_SYNTAX_HIGHLIGHT_PATH="$HOME/.local/share/zsh-syntax-highlighting"
 
@@ -129,6 +130,7 @@ function installFeature() {
     else
       git clone https://github.com/robbyrussell/oh-my-zsh.git "$OH_MY_ZSH_PATH" --depth 1
       cp "$OH_MY_ZSH_PATH/templates/zshrc.zsh-template" ~/.zshrc
+      sed -i "s/export ZSH=.\+/export ZSH=$OH_MY_ZSH_PATH/g" ~/.zshrc
       printf '\e[34mOh my ZSH\e[0m is \e[32minstalled\e[0m\n'
     fi
 
@@ -166,7 +168,6 @@ function installFeature() {
   fi
 
 # BASHRC Configs
-# Todo: move them into directory
   if [[ "$FEATURE_TO_CHECK" == "3" ]]; then
     if grep -Fxq "source $MAKE_LINUX_EASIER_PATH/bash_config" ~/.bashrc; then
       printf '\e[34mBASHRC configs\e[0m is \e[32malready installed\e[0m\n'
@@ -215,8 +216,8 @@ function installFeature() {
     if [[ "$OS" == "2" ]]; then
       $UPDATER_ARCH
       $INSTALLER_ARCH zsh powerline tmux vim
-      return
     fi
+
     printf '\e[34mzsh, powerline, tmux, vim\e[0m is \e[32minstalled\e[0m\n'
   fi
 
