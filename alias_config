@@ -12,7 +12,9 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
+
 alias cdp="cd -P"
+alias mkdircd=""
 
 alias du1="du -dh 1"
 
@@ -37,3 +39,8 @@ alias paux='ps aux | grep'
 alias usage='du -ch | grep total'
 
 alias totalusage='df -hl --total | grep total'
+
+function mkdircd() {
+     mkdir "$1"
+     cd "$1"
+ }
