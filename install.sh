@@ -25,6 +25,7 @@ OH_MY_ZSH_PATH="$HOME/.oh-my-zsh"
 VIM_RUNTIME="$HOME/.vim_runtime"
 POWERLEVEL_10K_PATH="$OH_MY_ZSH_PATH/custom/themes/powerlevel10k"
 ZSH_SYNTAX_HIGHLIGHT_PATH="$OH_MY_ZSH_PATH/custom/zsh-syntax-highlighting"
+OH_MY_TMUX_PATH="$HOME/.local/share/oh-my-tmux"
 
 function commandMustExists() {
   COMMAND="$1"
@@ -52,8 +53,9 @@ function features() {
   VIM="\e[34m2.  \e[0mInstall Ultimate Vim\e[0m"
   BASH_CONFIGS="\e[34m3.  \e[0mApply bash configs\e[0m"
   ZSH_CONFIGS="\e[34m4.  \e[0mApply zsh configs\e[0m"
-  PACKAGES_TERM="\e[34m5.  \e[0mInstall zsh, powerline, tmux, vim"
-  PACKAGES_UTIL="\e[34m6.  \e[0mInstall git"
+  TMUX="\e[34m5.  \e[0mInstall Oh My TMUX (\e[31mCurrent TMUX config will be removed\e[0m)\e[0m"
+  PACKAGES_TERM="\e[34m6.  \e[0mInstall zsh, powerline, tmux, vim"
+  PACKAGES_UTIL="\e[34m7.  \e[0mInstall git"
 
   printf "Select features you would like to install:
 "
@@ -63,28 +65,31 @@ $ZSH
 $VIM
 $BASH_CONFIGS
 $ZSH_CONFIGS
+$TMUX
 $PACKAGES_TERM
 $PACKAGES_UTIL
 "
-    FEATURES_AVAILABLE="123456"
+    FEATURES_AVAILABLE="1234567"
   elif [[ "$OS" == "2" ]]; then
     printf "
 $ZSH
 $VIM
 $BASH_CONFIGS
 $ZSH_CONFIGS
+$TMUX
 $PACKAGES_TERM
 $PACKAGES_UTIL
 "
-    FEATURES_AVAILABLE="123456"
+    FEATURES_AVAILABLE="1234567"
   else
     printf "
 $ZSH
 $VIM
 $BASH_CONFIGS
 $ZSH_CONFIGS
+$TMUX
 "
-    FEATURES_AVAILABLE="1234"
+    FEATURES_AVAILABLE="12345"
   fi
 
   printf "\n"
@@ -108,7 +113,11 @@ function checkFeature() {
     commandMustExists "sed"
     return
   fi
-  if [[ "$FEATURE_TO_CHECK" == "5" || "$FEATURE_TO_CHECK" == "6" ]]; then
+  if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
+    commandMustExists "git"
+    return
+  fi
+  if [[ "$FEATURE_TO_CHECK" == "6" || "$FEATURE_TO_CHECK" == "7" ]]; then
     if [[ "$OS" == "1" ]]; then
       commandMustExists "apt"
       return
@@ -206,8 +215,24 @@ function installFeature() {
     return
   fi
 
-# ZSH, powerline, tmux
+# Oh My Tmux
   if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
+    if [ -e "$OH_MY_TMUX_PATH" ]; then
+        printf '\e[34mOh My TMUX\e[0m is \e[32malready installed\e[0m\n'
+    else
+        git clone https://github.com/gpakosz/.tmux.git $OH_MY_TMUX_PATH
+        rm -f $HOME/.tmux.conf "$HOME/.tmux.conf.local"
+        ln -s -f "$OH_MY_TMUX_PATH/.tmux.conf" "$HOME/.tmux.conf"
+        cp "$OH_MY_TMUX_PATH/.tmux.conf.local" "$HOME/.tmux.conf.local"
+
+        printf '\e[34mOh My TMUX\e[0m is \e[32minstalled\e[0m\n'
+    fi
+
+    return
+  fi
+
+# ZSH, powerline, tmux
+  if [[ "$FEATURE_TO_CHECK" == "6" ]]; then
     if [[ "$OS" == "1" ]]; then
       $UPDATER_DEBIAN
       $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
@@ -221,7 +246,7 @@ function installFeature() {
   fi
 
 # git
-  if [[ "$FEATURE_TO_CHECK" == "6" ]]; then
+  if [[ "$FEATURE_TO_CHECK" == "7" ]]; then
     if [[ "$OS" == "1" ]]; then
       $UPDATER_DEBIAN
       $INSTALLER_DEBIAN git
@@ -237,9 +262,9 @@ function installFeature() {
 }
 
 function installAllFeatures() {
-  if [[ "$FEATURES" == *"5"* ]]; then
-    checkFeature 5
-    installFeature 5
+  if [[ "$FEATURES" == *"7"* ]]; then
+    checkFeature 7
+    installFeature 7
   fi
   if [[ "$FEATURES" == *"6"* ]]; then
     checkFeature 6
@@ -252,6 +277,10 @@ function installAllFeatures() {
   if [[ "$FEATURES" == *"1"* ]]; then
     checkFeature 1
     installFeature 1
+  fi
+  if [[ "$FEATURES" == *"5"* ]]; then
+    checkFeature 5
+    installFeature 5
   fi
   if [[ "$FEATURES" == *"4"* ]]; then
     checkFeature 4
