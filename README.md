@@ -10,6 +10,7 @@ Common utilities to make Linux & Terminal more convenient
   - 🗜 [PowerLevel 10k](https://github.com/romkatv/powerlevel10k)
   - 🔬 [ZSH syntax highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 - ⌨ [Ultimate VIM](https://github.com/amix/vimrc)
+- 😲 [Oh My TMUX](https://github.com/gpakosz/.tmux)
 - 🛠 Auto-installation for `tmux`, `zsh`, `vim`, `git` (Debian and Arch only)
 
 # 📄 How to install
