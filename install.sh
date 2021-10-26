@@ -49,13 +49,13 @@ Windows is \e[31mnot supported\e[0m
 
 # FEATURES: available answers
 function features() {
-  ZSH="\e[34m1.  \e[0mInstall Oh My ZSH \e[35m(+powerlevel 10k, +key aliases)\e[0m"
-  VIM="\e[34m2.  \e[0mInstall Ultimate Vim\e[0m"
-  BASH_CONFIGS="\e[34m3.  \e[0mApply bash configs\e[0m"
-  ZSH_CONFIGS="\e[34m4.  \e[0mApply zsh configs\e[0m"
-  TMUX="\e[34m5.  \e[0mInstall Oh My TMUX (\e[31mCurrent TMUX config will be removed\e[0m)\e[0m"
-  PACKAGES_TERM="\e[34m6.  \e[0mInstall zsh, powerline, tmux, vim"
-  PACKAGES_UTIL="\e[34m7.  \e[0mInstall git"
+  local ZSH="\e[34m1.  \e[0mInstall Oh My ZSH \e[35m(+powerlevel 10k, +key aliases)\e[0m"
+  local VIM="\e[34m2.  \e[0mInstall Ultimate Vim\e[0m"
+  local BASH_CONFIGS="\e[34m3.  \e[0mApply bash configs\e[0m"
+  local ZSH_CONFIGS="\e[34m4.  \e[0mApply zsh configs\e[0m"
+  local TMUX="\e[34m5.  \e[0mInstall Oh My TMUX (\e[31mCurrent TMUX config will be removed\e[0m)\e[0m"
+  local PACKAGES_TERM="\e[34m6.  \e[0mInstall zsh, powerline, tmux, vim"
+  local PACKAGES_UTIL="\e[34m7.  \e[0mInstall git"
 
   printf "Select features you would like to install:
 "
@@ -226,6 +226,13 @@ function installFeature() {
         cp "$OH_MY_TMUX_PATH/.tmux.conf.local" "$HOME/.tmux.conf.local"
 
         printf '\e[34mOh My TMUX\e[0m is \e[32minstalled\e[0m\n'
+    fi
+
+    if grep -Fxq "source -q $MAKE_LINUX_EASIER_PATH/tmux.conf" ~/.tmux.conf.local; then
+        printf '\e[34mAdditional TMUX configs\e[0m is \e[32malready installed\e[0m\n'
+    else
+      echo "source -q $MAKE_LINUX_EASIER_PATH/tmux.conf" >>~/.tmux.conf.local
+      printf '\e[34mAdditional TMUX configs\e[0m is \e[32minstalled\e[0m\n'
     fi
 
     return
