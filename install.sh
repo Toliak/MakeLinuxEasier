@@ -115,6 +115,7 @@ function checkFeature() {
   fi
   if [[ "$FEATURE_TO_CHECK" == "5" ]]; then
     commandMustExists "git"
+    commandMustExists "sed"
     return
   fi
   if [[ "$FEATURE_TO_CHECK" == "6" || "$FEATURE_TO_CHECK" == "7" ]]; then
@@ -234,6 +235,9 @@ function installFeature() {
       echo "source -q $MAKE_LINUX_EASIER_PATH/tmux.conf" >>~/.tmux.conf.local
       printf '\e[34mAdditional TMUX configs\e[0m is \e[32minstalled\e[0m\n'
     fi
+
+    sed -i 's/#set \-g @plugin '"'"'tmux\-plugins\/tmux-cpu'"'"'/set -g @plugin '"'"'tmux-plugins\/tmux-cpu'"'"'/g' ~/.tmux.conf.local
+    printf '\e[34mtmux-plugins/tmux-cpu\e[0m enabled\n'
 
     return
   fi
