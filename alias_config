@@ -2,6 +2,7 @@ alias c="clear"
 alias cl="clear"
 alias ckear="clear"
 alias clr="clear"
+alias cls="clear"
 
 alias ssr="ssh -l root"
 
@@ -14,12 +15,11 @@ alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 
 alias cdp="cd -P"
-alias mkdircd=""
 
 alias du1="du -dh 1"
 
-alias dps="sudo docker ps"
-alias di="sudo docker images"
+alias dps="docker ps"
+alias di="docker images"
 
 alias mv='mv -i'
 alias cp='cp -i'
@@ -35,12 +35,27 @@ alias pscpu="ps auxf | sort -nr -k 3"
 alias pscpu10="ps auxf | sort -nr -k 3 | head -10"
 
 alias paux='ps aux | grep'
-
 alias usage='du -ch | grep total'
-
 alias totalusage='df -hl --total | grep total'
 
+alias gitadog='git log --all --decorate --oneline --graph'
+alias search='grep -rn . -ie'
+
 function mkdircd() {
-     mkdir "$1"
-     cd "$1"
- }
+    mkdir "$1"
+    cd "$1"
+}
+
+function infty() {
+    while true; do
+        $@
+    done
+}
+
+function infty1() {
+    while true; do
+        $@
+        sleep 1
+    done
+}
+
