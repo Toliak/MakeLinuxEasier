@@ -239,6 +239,9 @@ function installFeature() {
     sed -i 's/#set \-g @plugin '"'"'tmux\-plugins\/tmux-cpu'"'"'/set -g @plugin '"'"'tmux-plugins\/tmux-cpu'"'"'/g' ~/.tmux.conf.local
     printf '\e[34mtmux-plugins/tmux-cpu\e[0m enabled\n'
 
+    sed -i 's/#set \-g @plugin '"'"'tmux\-plugins\/tmux-resurrect'"'"'/set -g @plugin '"'"'tmux-plugins\/tmux-resurrect'"'"'/g' ~/.tmux.conf.local
+    printf '\e[34mtmux-plugins/tmux-resurrect\e[0m enabled\n'
+
     return
   fi
 
