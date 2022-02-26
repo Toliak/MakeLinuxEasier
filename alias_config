@@ -59,3 +59,31 @@ function infty1() {
     done
 }
 
+function sus() {
+    COLOR=$((30 + $RANDOM % 6))
+
+    printf "\x1b[${COLOR}m"
+    printf '           ⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀        \n'
+    printf '        ⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀     \n'
+    printf '        ⣼⣿⠋        ⢀⣀⣀⠈⢻⣿⣿⡄    \n'
+    printf '       ⣸⣿⡏     ⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄   \n'
+    printf '       ⣿⣿⠁   ⢰⣿⣿⣯⠁        ⠈⠙⢿⣷⡄ \n'
+    printf '  ⣀⣤⣴⣶⣶⣿⡟    ⢸⣿⣿⣿⣆           ⣿⣷ \n'
+    printf ' ⢰⣿⡟⠋⠉⣹⣿⡇    ⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿ \n'
+    printf ' ⢸⣿⡇  ⣿⣿⡇      ⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃ \n'
+    printf ' ⣸⣿⡇  ⣿⣿⡇       ⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇  \n'
+    printf ' ⣿⣿⠁  ⣿⣿⡇                  ⢸⣿⣧  \n'
+    printf ' ⣿⣿   ⣿⣿⡇                  ⢸⣿⣿  \n'
+    printf " ⣿⣿   ⣿⣿⡇   \x1b[01;31mAre you root?\x1b[00;${COLOR}m  ⢸⣿⣿  \n"
+    printf ' ⢿⣿⡆  ⣿⣿⡇                   ⢸⣿⡇  \n'
+    printf ' ⠸⣿⣧⡀ ⣿⣿⡇                   ⣿⣿⠃  \n'
+    printf '  ⠛⢿⣿⣿⣿⣿⣇     ⣰⣿⣿⣷⣶⣶⣶⣶⠶    ⢠⣿⣿   \n'
+    printf '        ⣿⣿      ⣿⣿⡇ ⣽⣿⡏⠁    ⢸⣿⡇   \n'
+    printf '        ⣿⣿      ⣿⣿⡇ ⢹⣿⡆     ⣸⣿⠇   \n'
+    printf '        ⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁   ⠈⠻⣿⣿⣿⣿⡿⠏    \n'
+    printf '        ⠈⠛⠻⠿⠿⠿⠿⠋⠁              \n'
+    printf '\x1b[0m\n'
+
+    sudo su
+}
+
