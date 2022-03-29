@@ -41,6 +41,14 @@ alias totalusage='df -hl --total | grep total'
 alias gitadog='git log --all --decorate --oneline --graph'
 alias search='grep -rn . -ie'
 
+function mle-update() {
+    SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+    CUR_DIR=$( pwd )
+    cd $SCRIPT_DIR
+    git pull
+    cd $CUR_DIR
+}
+
 function mkdircd() {
     mkdir "$1"
     cd "$1"

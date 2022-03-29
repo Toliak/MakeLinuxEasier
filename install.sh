@@ -1,8 +1,8 @@
 #! /bin/bash
 
 set -e
-
-MAKE_LINUX_EASIER_PATH="$1"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+MAKE_LINUX_EASIER_PATH="$SCRIPT_DIR"
 
 if [[ "$MAKE_LINUX_EASIER_PATH" == "" ]]; then
   printf '\e[31mExpected argument\e[0m [\e[34mtarget path\e[0m]\n'
@@ -56,6 +56,8 @@ function features() {
   local TMUX="\e[34m5.  \e[0mInstall Oh My TMUX (\e[31mCurrent TMUX config will be removed\e[0m)\e[0m"
   local PACKAGES_TERM="\e[34m6.  \e[0mInstall zsh, powerline, tmux, vim"
   local PACKAGES_UTIL="\e[34m7.  \e[0mInstall git"
+  local UNIFIED_SHORTCUTS="\e[34m8.  \e[0mInstall Unified Shortcuts"
+
 
   printf "Select features you would like to install:
 "
@@ -68,6 +70,7 @@ $ZSH_CONFIGS
 $TMUX
 $PACKAGES_TERM
 $PACKAGES_UTIL
+$UNIFIED_SHORTCUTS
 "
     FEATURES_AVAILABLE="1234567"
   elif [[ "$OS" == "2" ]]; then
@@ -79,6 +82,7 @@ $ZSH_CONFIGS
 $TMUX
 $PACKAGES_TERM
 $PACKAGES_UTIL
+$UNIFIED_SHORTCUTS
 "
     FEATURES_AVAILABLE="1234567"
   else
@@ -88,6 +92,7 @@ $VIM
 $BASH_CONFIGS
 $ZSH_CONFIGS
 $TMUX
+$UNIFIED_SHORTCUTS
 "
     FEATURES_AVAILABLE="12345"
   fi
@@ -127,6 +132,10 @@ function checkFeature() {
       commandMustExists "pacman"
       return
     fi
+  fi
+  if [[ "$FEATURE_TO_CHECK" == "8" ]]; then
+    commandMustExists "git"
+    return
   fi
 }
 
@@ -250,8 +259,7 @@ function installFeature() {
     if [[ "$OS" == "1" ]]; then
       $UPDATER_DEBIAN
       $INSTALLER_DEBIAN zsh powerline fonts-powerline tmux vim
-    fi
-    if [[ "$OS" == "2" ]]; then
+    elif [[ "$OS" == "2" ]]; then
       $UPDATER_ARCH
       $INSTALLER_ARCH zsh powerline tmux vim
     fi
@@ -264,15 +272,20 @@ function installFeature() {
     if [[ "$OS" == "1" ]]; then
       $UPDATER_DEBIAN
       $INSTALLER_DEBIAN git
-      return
-    fi
-    if [[ "$OS" == "2" ]]; then
+    elif [[ "$OS" == "2" ]]; then
       $UPDATER_ARCH
       $INSTALLER_ARCH git
-      return
-    fi
+    fi 
     printf '\e[34mgit\e[0m is \e[32minstalled\e[0m\n'
+    return
   fi
+
+# unified shortcuts
+  if [[ "$FEATURE_TO_CHECK" == "8" ]]; then
+    printf '\e[34mUnified shortcuts\e[0m is \e[32mcomming soon\e[0m\n'
+    return
+  fi
+
 }
 
 function installAllFeatures() {
