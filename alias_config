@@ -6,6 +6,9 @@ alias cls="clear"
 
 alias ssr="ssh -l root"
 
+alias ip="ip --color=auto"
+
+alias ls="ls --color=tty"
 alias ll="ls -lah"
 
 alias ..="cd .."
