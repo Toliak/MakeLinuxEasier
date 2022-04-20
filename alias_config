@@ -57,6 +57,11 @@ function mkdircd() {
     cd "$1"
 }
 
+function smkdircd() {
+    sudo mkdir "$1"
+    cd "$1"
+}
+
 function infty() {
     while true; do
         $@
