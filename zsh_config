@@ -2,4 +2,4 @@ bindkey  "^[[H"   beginning-of-line
 bindkey  "^[[F"   end-of-line
 bindkey  "^[[3~"  delete-char
 
-plugins=(git npm node docker pip python tmux mvn nmap)
+plugins=(git npm node docker docker-compose pip python tmux mvn nmap)
