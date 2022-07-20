@@ -75,6 +75,15 @@ function infty1() {
     done
 }
 
+function genpass() {
+    local LENGTH="$1"
+    if [ "$LENGTH" = "" ]; then
+        LENGTH=32
+    fi
+    local PASSWORD=$( cat /dev/urandom | tr -dc '[:alpha:][:digit:]' | fold -w ${1:-"$LENGTH"} | head -n 1 )
+    echo "$PASSWORD"
+}
+
 function sus() {
     COLOR=$((30 + $RANDOM % 6))
 
