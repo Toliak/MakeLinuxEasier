@@ -48,6 +48,21 @@ function search-all() {
     find . -exec grep -rn {} -ie $@ \;
 }
 
+function k() {
+    printf "Confirm? \x1b[34m[y/N]\x1b[0m  "
+
+    local LINE=""
+    read -r LINE
+    LINE=$(echo "$LINE" | tr 'a-z' 'A-Z')
+
+    if [ ! "$LINE" = "Y" ]; then
+        printf "\n\x1b[31mCancelled\x1b[0m\n"
+        exit 1
+    fi
+    printf "\n\x1b[32mConfirmed\x1b[0m\n"
+    "$@"
+}
+
 function sudok() {
     sudo -K
     sudo "$@"
