@@ -50,7 +50,7 @@ Windows is \e[31mnot supported\e[0m
 # FEATURES: available answers
 function features() {
   local ZSH="\e[34m1.  \e[0mInstall Oh My ZSH \e[35m(+powerlevel 10k, +key aliases)\e[0m"
-  local VIM="\e[34m2.  \e[0mInstall Ultimate Vim\e[0m"
+  local VIM="\e[34m2.  \e[0mInstall Ultimate Vim \e[35m(+misc fixes and aliases)\e[0m"
   local BASH_CONFIGS="\e[34m3.  \e[0mApply bash configs\e[0m"
   local ZSH_CONFIGS="\e[34m4.  \e[0mApply zsh configs\e[0m"
   local TMUX="\e[34m5.  \e[0mInstall Oh My TMUX (\e[31mCurrent TMUX config will be removed\e[0m)\e[0m"
@@ -175,13 +175,14 @@ function installFeature() {
   if [[ "$FEATURE_TO_CHECK" == "2" ]]; then
     if [ -e "$VIM_RUNTIME" ]; then
       printf '\e[34mUltimate VIM\e[0m is \e[32malready installed\e[0m\n'
-      return
+    else
+      git clone --depth=1 https://github.com/amix/vimrc.git "$VIM_RUNTIME"
+      sh "$VIM_RUNTIME/install_awesome_vimrc.sh"
+      printf '\e[34mUltimate VIM\e[0m is \e[32minstalled\e[0m\n'
     fi
 
-    git clone --depth=1 https://github.com/amix/vimrc.git "$VIM_RUNTIME"
-    sh "$VIM_RUNTIME/install_awesome_vimrc.sh"
-
-    printf '\e[34mUltimate VIM\e[0m is \e[32minstalled\e[0m\n'
+    cp "$MAKE_LINUX_EASIER_PATH/my_configs.vim" "$VIM_RUNTIME/my_configs.vim"
+    printf '\e[34mUltimate VIM additional config\e[0m is \e[32minstalled\e[0m\n'
     return
   fi
 
@@ -275,7 +276,7 @@ function installFeature() {
     elif [[ "$OS" == "2" ]]; then
       $UPDATER_ARCH
       $INSTALLER_ARCH git
-    fi 
+    fi
     printf '\e[34mgit\e[0m is \e[32minstalled\e[0m\n'
     return
   fi
