@@ -27,6 +27,9 @@ filetype indent off
 :silent! au FileType javascript,typescript :silent! iunmap <buffer> $r
 :silent! au FileType javascript,typescript iunmap <buffer> $f
 
+" Fix dollar-sign in Visual mode
+:silent! vunmap $$
+
 " Hotkeys
 :set timeoutlen=10000
 noremap <silent> <C-w>L :vertical resize -5<CR>
