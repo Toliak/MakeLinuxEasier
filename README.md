@@ -1,6 +1,10 @@
+**DEPRECATED.**
+
+Project now is a part of [MakeConfigurationEasier](https://github.com/Toliak/MCE)
+
 # 🎁 Make Linux Easier
 
-**Make you Linux experience easier**
+**Make you Linux easier**
 
 Common utilities to make Linux & Terminal more convenient
 
